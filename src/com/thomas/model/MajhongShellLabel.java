@@ -5,6 +5,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+//麻将牌的背景
 public class MajhongShellLabel extends JLabel {
 	private String picPath;
 	private int width;

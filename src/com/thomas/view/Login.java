@@ -73,20 +73,7 @@ public class Login extends JFrame {
 			// TODO Auto-generated method stub
 			// 1.获得用户名
 			String uname = unameJTextFiled.getText();
-
-			// 2.创建一个socket
-			try {
-				Socket socket = new Socket("127.0.0.1", 8838);
-				// 3.跳到主窗口
-				new MainFrame(uname, socket);
-
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			new MainFrame(uname);
 		}
 
 	}

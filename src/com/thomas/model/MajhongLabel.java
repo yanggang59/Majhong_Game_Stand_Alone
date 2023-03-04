@@ -5,6 +5,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+//麻将牌
 public class MajhongLabel extends JLabel implements Comparable {
 	private int id;
 	private String name;
@@ -13,6 +14,8 @@ public class MajhongLabel extends JLabel implements Comparable {
 	private boolean isSelected; // 是否选中
 	private int width;
 	private int height;
+
+	// 麻将的背景牌
 	private MajhongShellLabel majhongShellLabel;
 
 	public String getPicPath() {
