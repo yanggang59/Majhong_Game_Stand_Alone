@@ -60,8 +60,8 @@ public class MajhongLabel extends JLabel implements Comparable {
 		if (position == 0) // 自己手里的牌
 		{
 			setValueLabelSize(width, height);
-			this.setSize(88, 128);
-			this.majhongShellLabel = new MajhongShellLabel("images/majhong/front_inhand_image_29.png", 88, 128);
+			this.setSize(width, height);
+			this.majhongShellLabel = new MajhongShellLabel("images/majhong/front_inhand_image_29.png", 50, 70);
 		}
 
 	}

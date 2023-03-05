@@ -73,7 +73,7 @@ public class Login extends JFrame {
 			// TODO Auto-generated method stub
 			// 1.获得用户名
 			String uname = unameJTextFiled.getText();
-			new MainFrame(uname);
+			new MainFrame(uname, 0);
 		}
 
 	}

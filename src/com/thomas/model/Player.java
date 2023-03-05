@@ -8,7 +8,7 @@ import java.util.List;
 public class Player {
 	private int id;
 	private String name;
-	private Socket socket;
+	// private Socket socket;
 	private boolean isDealer; // 是否是庄家
 
 	public boolean isDealer() {
@@ -37,13 +37,13 @@ public class Player {
 		this.name = name;
 	}
 
-	public Socket getSocket() {
-		return socket;
-	}
+	// public Socket getSocket() {
+	// return socket;
+	// }
 
-	public void setSocket(Socket socket) {
-		this.socket = socket;
-	}
+	// public void setSocket(Socket socket) {
+	// this.socket = socket;
+	// }
 
 	public List<Majhong> getMajhongs() {
 		return majhongs;
@@ -57,10 +57,10 @@ public class Player {
 
 	}
 
-	public Player(int id, String name, Socket socket, List<Majhong> majhongs) {
+	public Player(int id, String name, List<Majhong> majhongs) {
 		this.id = id;
 		this.name = name;
-		this.socket = socket;
+		// this.socket = socket;
 		this.majhongs = majhongs;
 	}
 

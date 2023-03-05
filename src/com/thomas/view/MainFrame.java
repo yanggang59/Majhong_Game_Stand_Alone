@@ -22,13 +22,16 @@ import com.thomas.util.GameUtil;
 public class MainFrame extends JFrame {
 	public MyPanel myPanel;
 	public String uname;
-	// public Socket socket;
+	public int playerID;
 
 	public SendThread sendThread;
 	public ReceiveThread receiveThread;
 	public MusicThread musicThread; // 播放音效线程
 
 	public Player currentPlayer; // 存放当前玩家对象
+
+	// 存放所有的麻将的列表
+	public List<Majhong> allMajhongs = new ArrayList<Majhong>();
 
 	// 自家的手持麻将列表
 	public List<MajhongLabel> myHoldMajhongLabels = new ArrayList<MajhongLabel>();
@@ -71,9 +74,9 @@ public class MainFrame extends JFrame {
 	// 现在是否是轮到我出牌
 	public boolean isMyturn;
 
-	public MainFrame(String uname) {
+	public MainFrame(String uname, int playerID) {
 		this.uname = uname;
-		// this.socket = socket;
+		this.playerID = playerID;
 
 		// 设置窗口的属性
 		this.setSize(1280, 720);
@@ -85,6 +88,16 @@ public class MainFrame extends JFrame {
 		myPanel = new MyPanel();
 		myPanel.setBounds(0, 0, 1280, 720);
 		this.add(myPanel);
+
+		CreateMajhongs();
+
+		currentPlayer = new Player(0, "Test");
+		for (int i = 0; i < 13; i++) {
+			currentPlayer.getMajhongs().add(allMajhongs.get(i));
+		}
+
+		ShowPlayerInfo();
+		addClickEventToMajhongLabels();
 
 		// // 启动发送消息的线程
 		// sendThread = new SendThread(socket, uname);
@@ -164,6 +177,77 @@ public class MainFrame extends JFrame {
 
 	}
 
+	private void CreateMajhongs() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 1; j < 10; j++) {
+				// 条 1 - 9
+				Majhong majhong_tiao = new Majhong(j, j + "tiao");
+				allMajhongs.add(majhong_tiao);
+
+				// 筒 11 - 19
+				Majhong majhong_tong = new Majhong(10 + j, j + "tong");
+				allMajhongs.add(majhong_tong);
+
+				// 万 21 - 29
+				Majhong majhong_wan = new Majhong(20 + j, j + "wan");
+				allMajhongs.add(majhong_wan);
+			}
+			// 东 31
+			Majhong majhong_dong = new Majhong(31, "dong");
+			allMajhongs.add(majhong_dong);
+
+			// 南 32
+			Majhong majhong_nan = new Majhong(32, "nan");
+			allMajhongs.add(majhong_nan);
+
+			// 西 33
+			Majhong majhong_xi = new Majhong(33, "xi");
+			allMajhongs.add(majhong_xi);
+
+			// 北 34
+			Majhong majhong_bei = new Majhong(34, "bei");
+			allMajhongs.add(majhong_bei);
+
+			// 中 35
+			Majhong majhong_zhong = new Majhong(35, "hongzhong");
+			allMajhongs.add(majhong_zhong);
+
+			// 发 36
+			Majhong majhong_fa = new Majhong(36, "facai");
+			allMajhongs.add(majhong_fa);
+
+			// 白 37
+			Majhong majhong_bai = new Majhong(37, "baiban");
+			allMajhongs.add(majhong_bai);
+		}
+
+		// 洗牌
+		Collections.shuffle(allMajhongs);
+	}
+
+	public void ShowPlayerInfo() {
+		List<Majhong> majhongs = currentPlayer.getMajhongs();
+		for (int i = 0; i < majhongs.size(); i++) {
+			Majhong majhong = majhongs.get(i);
+			String majhongName = majhong.getName();
+			MajhongLabel majhongLabel = new MajhongLabel(majhongs.get(i).getId(), majhongName, 0,
+					"images/majhong/" + majhong.getId() + ".png", 47, 56);
+			myHoldMajhongLabels.add(majhongLabel);
+		}
+		System.out.println("Before Sorting:");
+		for (int i = 0; i < myHoldMajhongLabels.size(); i++) {
+			System.out.println(myHoldMajhongLabels.get(i).getId());
+		}
+		// 对麻将牌进行排序
+		Collections.sort(myHoldMajhongLabels);
+		System.out.println("After Sorting:");
+		for (int i = 0; i < myHoldMajhongLabels.size(); i++) {
+			System.out.println(myHoldMajhongLabels.get(i).getId());
+		}
+		showHoldMajhongs(myHoldMajhongLabels, currentPlayer.getId());
+		this.repaint();
+	}
+
 	public void showAllPlayersInfo(List<Player> players) {
 		// 1.显示4个玩家的名字,uname
 
@@ -206,8 +290,8 @@ public class MainFrame extends JFrame {
 			String shellPath = "images/majhong/front_inhand_image_29.png";
 			for (int i = 0; i < myHoldMajhongLabels.size(); i++) {
 				// 一张一张的显示出来
-				GameUtil.move(myHoldMajhongLabels.get(i).getMajhongShellLabel(), 40 + 82 * i, 550);
-				GameUtil.move(myHoldMajhongLabels.get(i), 55 + 82 * i, 580);
+				GameUtil.move(myHoldMajhongLabels.get(i).getMajhongShellLabel(), 350 + 47 * i, 550);
+				GameUtil.move(myHoldMajhongLabels.get(i), 351 + 47 * i, 592);
 
 				this.myPanel.add(myHoldMajhongLabels.get(i)); // 添加到面板
 				this.myPanel.add(myHoldMajhongLabels.get(i).getMajhongShellLabel()); // 添加到面板
@@ -252,7 +336,7 @@ public class MainFrame extends JFrame {
 				this.myPanel.setComponentZOrder(myDiscardedMajhongLabels.get(i).getMajhongShellLabel(), 0);
 				this.myPanel.setComponentZOrder(myDiscardedMajhongLabels.get(i), 0);
 				// 一张一张的显示出来
-				GameUtil.move(myDiscardedMajhongLabels.get(i).getMajhongShellLabel(), 254 + 38 * i, 395);
+				GameUtil.move(myDiscardedMajhongLabels.get(i).getMajhongShellLabel(), 254 + 38 * i, 375);
 				GameUtil.move(myDiscardedMajhongLabels.get(i), 255 + 38 * i, 370);
 			}
 		}
@@ -318,6 +402,7 @@ public class MainFrame extends JFrame {
 				discardMajhong(majhongLabel);
 				showHoldMajhongs(myHoldMajhongLabels, currentPlayer.getId());
 				showDiscardMajhongLabels(myDiscardedMajhongLabels, currentPlayer.getId());
+				majhongLabel.removeMouseListener(this);
 			}
 			// 如果之前没有选择,则先看有没有其他选中的牌
 			else {
